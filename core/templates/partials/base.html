@@ -1,0 +1,35 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+    {% load static %}
+    <script type="text/javascript" src={% static "js/jquery.js" %} />
+    {% include 'material/includes/material_css.html' %}
+    {% include 'material/includes/material_js.html' %}
+
+</head>
+<body class="grey lighten-2">
+
+<nav>
+    <div class="nav-wrapper grey darken-3">
+        <a href="#" class="brand-logo center">
+            <img src="{% static '/images/wmark.png' %}" height="40px" alt="">
+            
+            picha</a>
+        <ul id="nav-mobile" class="left hide-on-med-and-down">
+            <li><a href="{% url 'index' %}">Home </a></li>
+            <li><a href="{% url 'photos' %}">photos</a></li>
+            <li><a href="{% url 'photo' %}">upload</a></li>
+        </ul>
+    </div>
+</nav>
+<div class="container ">
+<div class="content">
+{% block content %}
+
+{% endblock %}
+    </div>
+</div>
+</body>
+</html>

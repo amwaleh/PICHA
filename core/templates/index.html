@@ -1,0 +1,78 @@
+{% extends './partials/base.html' %}
+
+{% block content %}
+    {% load static %}
+
+
+    {% include 'material/includes/material_css.html' %}
+    {% include 'material/includes/material_js.html' %}
+    {% load material_form %}
+
+
+
+
+
+    <div class="row white z-depth-2" style="height:80vh; margin-top:5%; padding:15%; >
+
+
+            {% if form %}
+                <div class="row">
+                <div class="card col l6 m4 offset-l2">
+                    <div class="card-content">
+                        <form method="POST" enctype="multipart/form-data">
+                            <H3 class="grey-text">upload a photo</H3>
+                            {% csrf_token %}
+                            {% form form=form %}{% endform %}
+                            <button type="submit" name="_submit" class="btn ">Submit</button>
+                        </form>
+
+                    </div>
+                </div>
+                </div>
+
+            {% endif %}
+
+    <div class="col l10">
+        <img class="materialboxed " src="{{ picdetails.image.url }}">
+
+    <div class="grey fixed">
+        {% for effect  in presets %}
+            <div class="col s3 l2">
+                <div class="card">
+                    <div class="card-image "knskqwdkk>
+                        <img src="{{MEDIA_URL}}{{ effect.1 }} " width="150px" class="card">
+                        {{ effect.0 }}
+                    </div>
+
+
+                </div>
+            </div>
+
+
+        {% endfor %}
+    </div>
+
+    </div>
+
+    </div>
+
+
+
+    <script>
+        $('.button-collapse').sideNav({
+                    menuWidth: 390, // Default is 300
+                    edge: 'right', // Choose the horizontal origin
+                    closeOnClick: false, // Closes side-nav on <a> clicks, useful for Angular/Meteor
+                    draggable: true // Choose whether you can drag to open on touch screens
+
+                }
+        );
+
+
+        $(document).ready(function () {
+            $('.materialboxed').materialbox();
+        });
+
+    </script>
+
+{% endblock content %}

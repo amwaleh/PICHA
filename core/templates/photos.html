@@ -1,0 +1,46 @@
+{% extends './partials/base.html' %}
+
+{%  block content %}
+    {% include 'material/includes/material_css.html' %}
+    {% include 'material/includes/material_js.html' %}
+<div class="row card" style="height:95vh; margin-top:30px; padding:20px; padding-bottom: 40px">
+
+    {% for image in photos %}
+
+        <div class="col s12 l4 m12 ">
+            <div class="card ">
+                <div class="card-image">
+                    <img src="{{ image.thumb.url }}">
+                    <span class="card-title">Card Title</span>
+                </div>
+
+
+                <div class="card-action ">
+                    <div class="right">added :{{ image.created | date }} </div>
+                    <a href="{% url 'picdetails' image.pk %}">view</a>
+                </div>
+            </div>
+        </div>
+
+    {% endfor %}
+
+
+
+
+<div class="pagination">
+    <span class="step-links">
+        {% if page_obj.has_previous %}
+            <a href="?page={{ page_obj.previous_page_number }}">previous</a>
+        {% endif %}
+
+        <span class="current">
+            Page {{ page_obj.number }} of {{page_obj.paginator.num_pages }}.
+        </span>
+
+        {% if page_obj.has_next %}
+            <a href="?page={{ page_obj.next_page_number }}">next</a>
+        {% endif %}
+    </span>
+</div>
+    </div>
+{% endblock content%}
