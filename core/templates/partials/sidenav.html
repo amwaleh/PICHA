@@ -1,0 +1,36 @@
+<style>
+
+    .effects{
+        padding: 5px;
+    }
+</style>
+
+<div class="row effects">
+{% csrf_token %}
+    {% for effect in effects %}
+        <div class="card col s12 ">
+            <p class="range-field "> {{ effect }}
+                <input type="range" id={{ picdetails.pk }} min="-10" max="10"  name="{{ effect }}" value="0"/>
+            </p>
+        </div>
+    {% endfor %}
+
+</div>
+
+
+
+<script>
+    $('.effects').on('change','input',function(){
+        var url ='/preset/'+ this.name +'/'+ this.id +'/?rate='+ (this.value/10)
+        console.log(url)
+        $.ajax({
+                    url: url,
+                    data: {
+                        image:$('.main-photo').attr('src')
+                    },
+                    success: function (data) {
+                        $('.main-photo').attr('src',data)
+                    }
+                }).done(console.log('done'));
+        });
+</script>

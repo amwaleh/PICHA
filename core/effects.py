@@ -3,36 +3,38 @@ import os
 from PIL import Image, ImageEnhance,ImageFilter
 from django.conf import settings
 
+
+
+
 class Presets(object):
-    def __init__(self, image):
+    def __init__(self, image=None):
         self.img = image
 
-    def contrast(self):
+    def contrast(self , rate=0.33):
+        rate = rate*10
         enh = ImageEnhance.Contrast(self.img)
-        return enh.enhance(3.3)
+        return enh.enhance(rate)
 
-    def brightness(self):
+    def brightness(self,rate=0.11):
+        rate = rate*10
         enh = ImageEnhance.Brightness(self.img)
-        return enh.enhance(1.7)
+        return enh.enhance(rate)
 
-    def color(self):
+    def color(self,rate=0.17):
+        rate = rate*10
         enh = ImageEnhance.Color(self.img)
-        return enh.enhance(1.7)
+        return enh.enhance(rate)
 
+    def sharpen(self,rate=0.03):
+        rate = rate*10
+        enh = ImageEnhance.Sharpness(self.img)
+        return enh.enhance(rate)
 
-    def detail(self):
-        return  self.img.filter(ImageFilter.DETAIL)
+    def blur(self,rate=0):
+        rate = rate*10
+        im = self.img.filter(ImageFilter.GaussianBlur(radius=rate))
+        return im
 
-    def sharpen(self):
-        return  self.img.filter(ImageFilter.SHARPEN)
-
-    def presets_dict(self):
-        return {
-            'contrast':self.contrast(),
-            'brightness':self.brightness(),
-            'color':self.color(),
-            'details':self.detail(),
-        }
 
     def thumbnail(self):
         media_path = os.path.join(settings.BASE_DIR,settings.MEDIA_ROOT,'preset')
@@ -41,19 +43,28 @@ class Presets(object):
         if not os.path.isdir(media_path):
             os.mkdir(media_path)
 
-        for k, v in eff.items():
-            x = v.resize((256,200))
-            save_path = os.path.join(settings.MEDIA_ROOT,'preset','{}.PNG'.format(k))
+        for Key, effect in eff.items():
+            x = effect().resize((256,200))
+            save_path = os.path.join(settings.MEDIA_ROOT,'preset','{}.PNG'.format(Key))
             x.save(save_path)
-            obj = [k, os.path.join('preset','{}.PNG'.format(k))]
+            obj = [Key, os.path.join('preset','{}.PNG'.format(Key))]
 
             thumbnails_paths.append(obj)
 
         return thumbnails_paths
 
+    def presets_dict(self):
+        return {
+            'contrast':self.contrast,
+            'brightness':self.brightness,
+            'color':self.color,
+            'blur': self.blur,
+            'sharpen':self.sharpen,
+        }
 
 
 
+EFFECTS = Presets().presets_dict().keys()
 
 
 

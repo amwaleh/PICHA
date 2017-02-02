@@ -26,6 +26,7 @@ urlpatterns = [
     url(r'^photo/$',views.ProcessView.as_view(), name='photo'),
     url(r'^photos/$',views.Photos.as_view(), name='photos'),
     url(r'^photo/(?P<pk>[0-9]+)/$',views.PicView.as_view(), name='picdetails'),
+    url(r'^preset/([\w-]+)/([0-9]+)/$',views.Effects.as_view(), name='preset'),
 
 
 ]+static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)
