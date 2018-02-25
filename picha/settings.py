@@ -25,7 +25,7 @@ SECRET_KEY = 'qqzg%=7ir0bfdxtv-dii6m0_+%v+s$px(*lqztg^0($k*4$h)9'
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
 
-ALLOWED_HOSTS = []
+ALLOWED_HOSTS = ['pichapoint.herokuapp.com']
 
 
 # Application definition
