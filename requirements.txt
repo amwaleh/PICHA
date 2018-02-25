@@ -1,0 +1,15 @@
+appdirs==1.4.0
+dj-static==0.0.6
+Django==1.10.5
+django-appconf==1.0.2
+django-imagekit==3.3
+django-jquery==3.1.0
+django-material==0.12.3
+gunicorn==19.7.1
+olefile==0.44
+packaging==16.8
+pilkit==1.1.13
+Pillow==4.0.0
+pyparsing==2.1.10
+six==1.10.0
+static3==0.7.0
