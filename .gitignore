@@ -203,7 +203,7 @@ core/brightness.PNG
 core/color.PNG
 core/contrast.PNG
 core/details.PNG
-core/migrations/
+media/**/*
 picha/__pycache__/
 db.sqlite3
 *.sqlite3

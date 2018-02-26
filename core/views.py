@@ -9,25 +9,34 @@ from .effects import Presets,EFFECTS
 from PIL import Image
 from django.views import View
 from django.conf import settings
-
+from uuid import uuid4
 class MainView(TemplateView):
+    """This is the home page view"""
     template_name = 'index.html'
-    pone = None
 
 
     def get_context_data(self, **kwargs):
+        """Adds `pic` key to the context object
+        """
         context = super(MainView,self).get_context_data(**kwargs)
-        context['pic'] = self.pone
+        context['pic'] = None
         return context
 
 class ProcessView(CreateView):
+    """This `ClassView` creates a form for sending the photo 
+    manipulation data  
+    """
     template_name = 'index.html'
     model = Album
     form_class = PhotoForm
 
 
 
-class PicView(DetailView):
+class PicView(DetailView): 
+    """
+    This displays one picture at a time 
+    
+    """
     template_name = 'index.html'
     model = Album
     context_object_name = 'picdetails'
@@ -41,6 +50,10 @@ class PicView(DetailView):
 
 
 class Photos(ListView):
+    """
+    Display a list of all photos uploaded
+    
+    """
     template_name = 'photos.html'
     model = Album
     context_object_name = 'photos'
@@ -48,6 +61,10 @@ class Photos(ListView):
     ordering = '-pk'
 
 class Effects(View):
+    """
+    Maps out the available effects, does the heavy lifting
+    
+    """
     MEDIA_PATH = settings.MEDIA_ROOT
     BASE_DIR = settings.BASE_DIR
     TEMP_FOLDER = 'CACHE/preset/tmp'
@@ -61,7 +78,7 @@ class Effects(View):
         # declare path for accessing an image on the browser view
         temp_image = os.path.join(settings.MEDIA_URL,self.TEMP_FOLDER,'{}.PNG'.format(pk))
 
-        # check if path
+        # check if path exists 
         if not os.path.isdir(self.TEMP_PATH):
             os.makedirs(self.TEMP_PATH)
         # create an absolute for opening image
@@ -75,18 +92,30 @@ class Effects(View):
         preset_pic = Presets(im).presets_dict()
         image = preset_pic[effect]()
         image.save(save_path)
-        return render(request,'index.html',context={'presets':pic.preset_thumbnails(),
-                                                    'picdetails':{
-                                                        'pk':pk,
-                                                        'image':
-                                                            {'url':temp_image}
-                                                    },
-                                                    'effects':EFFECTS
-                                                    })
+        pic_details = {
+            'pk': pk,
+            'image': {'url': temp_image}
+        }
+        return render(
+            request,
+            'index.html',
+            context={
+                'presets': pic.preset_thumbnails(),
+                'picdetails': pic_details,
+                'effects': EFFECTS
+            }
+        )
 
 
     def process_temp_file(self, request):
-        rand = random.random()
+        """Creates a temp file with the applied effects 
+        
+        :param request: request sent fro front end
+        :type request: webob.http
+        :return: Http response
+        :rtype:
+        """
+        rand = uuid4()
         effect, pk = self.args
         canvas_image = request.GET.get('image')
         save_path = os.path.join(self.TEMP_PATH,'{}{}.PNG'.format(pk,rand))
@@ -97,7 +126,8 @@ class Effects(View):
             im =Image.open("{}{}".format(settings.BASE_DIR, canvas_image))
 
         preset_pic = Presets(im).presets_dict()
-        image = preset_pic[effect](float(request.GET.get('rate')))
+        rate = float(request.GET.get('rate'))
+        image = preset_pic[effect](rate)
         image.save(save_path)
         return HttpResponse(content=temp_image.encode())
 

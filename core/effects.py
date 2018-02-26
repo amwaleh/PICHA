@@ -4,8 +4,6 @@ from PIL import Image, ImageEnhance,ImageFilter
 from django.conf import settings
 
 
-
-
 class Presets(object):
     def __init__(self, image=None):
         self.img = image
